@@ -1,9 +1,10 @@
+import styles from './Navbar.module.css';
 import Badge from '@mui/material/Badge';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 const Navbar = () => {
     return (
-        <div>
+        <div className={styles.Contenedor}>
             <h2>RepuestoSyS</h2>
             <ul>
                 <li>
@@ -20,4 +21,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar
+export default Navbar;
