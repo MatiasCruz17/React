@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Cantidad from '../ui/itemCount/itemCount';
 
 const ItemDetailContainer = () => {
-    const { itemId } = useParams();  // Obtener el ID del producto desde la URL
+    const { itemId } = useParams();  
     const [product, setProduct] = useState(null);
 
     useEffect(() => {
