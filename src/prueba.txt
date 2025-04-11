@@ -1,0 +1,8 @@
+          <Route path="/test-firebase" element={<TestFirebase />} />
+
+          import TestFirebase from './firebase/TestFirebase';
+
+
+import {db} from "../firebaseConfig";
+
+import { collection, getDocs } from 'firebase/firestore';

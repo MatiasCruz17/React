@@ -1,12 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-const Cantidad = ({ stock = 10, inicial = 1, nombre, precio }) => {
+const Cantidad = ({ stock = 10, inicial = 1, nombre, precio, onAdd }) => {
     const [contador, setContador] = useState(inicial);
-    const [carrito, setCarrito] = useState([]);
-
-    useEffect(() => {
-        localStorage.setItem("carrito", JSON.stringify(carrito));
-    }, [carrito]);
 
     const decrementar = () => {
         if (contador > 1) setContador(contador - 1);
@@ -16,20 +11,10 @@ const Cantidad = ({ stock = 10, inicial = 1, nombre, precio }) => {
         if (contador < stock) setContador(contador + 1);
     };
 
-    const agregarAlCarrito = () => {
-        const nuevoProducto = {
-            id: 1,
-            nombre,
-            cantidad: contador,
-            precio,
-        };
-        setCarrito([...carrito, nuevoProducto]);
-    };
-
     const manejarCantidad = (e) => {
         const valor = e.target.value;
         if (valor === "") {
-            setContador(valor);
+            setContador("");
             return;
         }
     
@@ -39,14 +24,22 @@ const Cantidad = ({ stock = 10, inicial = 1, nombre, precio }) => {
             setContador(numero);}
     };
 
+    const handleAgregar = () =>{
+        const cantidadValida = Number(contador);
+        if (onAdd && cantidadValida >= 1 && cantidadValida <= stock){
+            onAdd(cantidadValida);
+            setContador(inicial);
+        }
+    };
+
     return (
         <div>
             <h2>{nombre}</h2>
             <p>Precio: ${precio}</p>
             <button onClick={decrementar} disabled={contador <= 1}>-</button>
-            <input type="number" value={contador || ""} onChange={manejarCantidad} />
+            <input type="number" value={contador || ""} onChange={manejarCantidad} min = "1" max={stock} />
             <button onClick={incrementar} disabled={contador >= stock}>+</button>
-            <button onClick={agregarAlCarrito}>Agregar al carrito</button>
+            <button onClick={handleAgregar}>Agregar al carrito</button>
         </div>
     );
 };
