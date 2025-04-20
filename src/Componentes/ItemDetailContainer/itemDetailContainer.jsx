@@ -1,5 +1,7 @@
 import { useState, useEffect, useContext } from 'react'; 
 import { useParams } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../firebase/firebaseConfig';
 import Cantidad from '../ui/itemCount/itemCount';
 import { CartContext } from '../../context/CartContext';
 
@@ -8,20 +10,30 @@ const ItemDetailContainer = () => {
     const [product, setProduct] = useState(null);
     const { addToCart } = useContext (CartContext);
 
-    useEffect(() => {
-        let url = `https://fakestoreapi.com/products/${itemId}`;
+    useEffect (() => {
+        const fetchProducto = async () => {
+            try {
+                const docRef = doc(db, "productos", itemId);
+                const docSnap = await getDoc(docRef);
 
-        fetch(url)
-            .then((res) =>res.json())
-            .then((data) => setProduct(data))
-            .catch((error) => console.error("Error al obtener el producto", error));
-    }, [itemId])
+                if (docSnap.exists()) {
+                    setProduct({ id: docSnap.id, ...docSnap.data()});
+                } else {
+                    alert ("No existe el producto con ese ID");
+                }
+            } catch (error) {
+                console.error("Error al obtener el producto:", error);
+            }
+        };
+
+        fetchProducto();
+    }, [itemId]);
 
     const handleAdd = (product, cantidad) => {
         const item = {
             id: product.id,
-            nombre: product.title,
-            precio: product.price,
+            nombre: product.nombre,
+            precio: product.precio,
         };
         addToCart(item, cantidad);
     };
@@ -31,12 +43,12 @@ const ItemDetailContainer = () => {
     }
 
     return (
-        <div>
-        <h2>{product.title}</h2>
-        <img src={product.image} alt={product.title} width="150" />
-        <p>{product.description}</p>
-        <p>Precio: ${product.price}</p>
-        <Cantidad stock={10} inicial={1} nombre={product.title} precio={product.price} onAdd={(cantidad) => handleAdd(product, cantidad)} />
+        <div className="detalle-producto">
+        <h2>{product.nombre}</h2>
+        <img src={product.imagen} alt={product.nombre} width="150" />
+        <p>{product.descripcion}</p>
+        <p>Precio: ${product.precio}</p>
+        <Cantidad stock={product.stock || 10} inicial={1} nombre={product.nombre} precio={product.precio} onAdd={(cantidad) => handleAdd(product, cantidad)} />
     </div>
     );
 };

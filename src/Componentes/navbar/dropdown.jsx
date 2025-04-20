@@ -15,10 +15,9 @@ const Dropdown = () => {
             {mostrarOpciones && (
                 <div className="dropdown-content">
                     <Link to="/productos">Todos</Link>
-                    <Link to="/categoria/electronics">Electronica</Link>
-                    <Link to="/categoria/jewelery">Joyeria</Link>
-                    <Link to="/categoria/men's clothing">Hombre</Link>
-                    <Link to="/categoria/women's clothing">Mujer</Link>
+                    <Link to="/categoria/cubiertas">Cubiertas</Link>
+                    <Link to="/categoria/transmision">Transmision</Link>
+                    <Link to="/categoria/baterias">Baterías</Link>
                 </div>
             )}
         </div>
